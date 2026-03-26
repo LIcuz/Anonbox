@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ar" dir="auto">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0f172a">
+<title>AnonBox | Secure Messenger</title>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #e2e8f0;
+  --accent: #f59e0b;
+  --accent-hover: #eab308;
+  --border: #334155;
+  --secondary: #94a3b8;
+  --danger: #ef4444;
+  --success: #10b981;
+  --input-bg: #0f172a;
+  --shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+  --heart: #ff6b6b;
+}
+
+.light {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #0f172a;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --border: #e2e8f0;
+  --secondary: #475569;
+  --input-bg: #f8fafc;
+  --shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, 'Segoe UI', 'Tahoma', 'Noto Sans Arabic', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: background 0.3s, color 0.2s;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  background: var(--card);
+  border-radius: 2rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-section h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), #fbbf24);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.title-section i {
+  font-size: 1.8rem;
+  color: var(--accent);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  padding: 8px 14px;
+  cursor: pointer;
+  color: var(--text);
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.icon-btn:hover {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+/* user info card */
+.user-card {
+  background: var(--bg);
+  border-radius: 1.2rem;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid var(--border);
+}
+
+.user-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.user-label {
+  font-weight: 600;
+  color: var(--secondary);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-value {
+  font-weight: 500;
+  word-break: break-all;
+  background: var(--card);
+  padding: 6px 14px;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+
+.edit-name-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  color: var(--accent);
+  transition: 0.2s;
+}
+
+.edit-name-btn:hover {
+  background: var(--accent);
+  color: #000;
+}
+
+/* device info card */
+.device-card {
+  background: var(--bg);
+  border-radius: 1.2rem;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.device-icon {
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.device-details {
+  flex: 1;
+  font-size: 0.8rem;
+}
+
+.device-type {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.device-os {
+  font-size: 0.7rem;
+  color: var(--secondary);
+}
+
+/* message area */
+textarea {
+  width: 100%;
+  height: 130px;
+  border: 2px solid var(--border);
+  border-radius: 1.2rem;
+  padding: 12px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: 0.2s;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(245,158,11,0.2);
+}
+
+/* emoji strip */
+.emoji-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.emoji-strip button {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+  color: var(--text);
+}
+
+.emoji-strip button:hover {
+  background: var(--accent);
+  transform: scale(1.05);
+  border-color: var(--accent);
+}
+
+.actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.char-counter {
+  font-size: 0.7rem;
+  background: var(--bg);
+  padding: 4px 12px;
+  border-radius: 2rem;
+  color: var(--secondary);
+}
+
+.like-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  padding: 8px 16px;
+  border-radius: 3rem;
+  border: 1px solid var(--border);
+}
+
+.like-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  color: var(--secondary);
+}
+
+.like-btn.liked {
+  color: #ff4757;
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.like-count {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+
+.heart-animation {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  font-size: 2rem;
+  animation: floatHeart 1s ease-out forwards;
+}
+
+@keyframes floatHeart {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(1.5);
+  }
+}
+
+.send-btn {
+  width: 100%;
+  background: var(--accent);
+  border: none;
+  padding: 14px;
+  border-radius: 3rem;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+  margin-top: 8px;
+}
+
+.send-btn:active {
+  transform: scale(0.97);
+}
+
+.status {
+  text-align: center;
+  margin-top: 14px;
+  padding: 8px;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status.success {
+  background: rgba(16,185,129,0.15);
+  color: var(--success);
+}
+
+.status.error {
+  background: rgba(239,68,68,0.15);
+  color: var(--danger);
+}
+
+.status.sending {
+  background: rgba(245,158,11,0.1);
+  color: var(--accent);
+}
+
+.footer-note {
+  font-size: 0.65rem;
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--secondary);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fade 0.2s;
+}
+
+.modal-content {
+  background: var(--card);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 320px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+}
+
+.modal-content h3 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 2rem;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 2rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+  .title-section h1 {
+    font-size: 1.4rem;
+  }
+  .emoji-strip button {
+    font-size: 1rem;
+    padding: 4px 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+  <div class="header">
+    <div class="title-section">
+      <i class="fas fa-shield-hooded"></i>
+      <h1 id="appTitle">AnonBox</h1>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="langToggleBtn"><i class="fas fa-language"></i> <span id="langBtnText">EN</span></button>
+      <button class="icon-btn" id="themeToggleBtn"><i class="fas fa-moon"></i></button>
+    </div>
+  </div>
+
+  <!-- User info card -->
+  <div class="user-card">
+    <div class="user-row">
+      <span class="user-label"><i class="fas fa-user-astronaut"></i> <span id="nameLabel">هويتك:</span></span>
+      <span class="user-value" id="displayName">-</span>
+      <button class="edit-name-btn" id="editNameBtn"><i class="fas fa-pen"></i> <span id="editBtnText">تعديل</span></button>
+    </div>
+  </div>
+
+  <!-- Device info card -->
+  <div class="device-card" id="deviceCard">
+    <div class="device-icon"><i class="fas fa-mobile-alt"></i></div>
+    <div class="device-details">
+      <div class="device-type" id="deviceType">جاري التحقق...</div>
+      <div class="device-os" id="deviceOS"></div>
+    </div>
+  </div>
+
+  <!-- Message area -->
+  <textarea id="msgInput" placeholder="اكتب رسالتك هنا..."></textarea>
+  
+  <!-- Emoji strip (hearts, likes, cute emojis) -->
+  <div class="emoji-strip" id="emojiStrip">
+    <button data-emoji="❤️" class="emoji-quick">❤️</button>
+    <button data-emoji="😍" class="emoji-quick">😍</button>
+    <button data-emoji="😂" class="emoji-quick">😂</button>
+    <button data-emoji="😢" class="emoji-quick">😢</button>
+    <button data-emoji="🔥" class="emoji-quick">🔥</button>
+    <button data-emoji="✨" class="emoji-quick">✨</button>
+    <button data-emoji="👍" class="emoji-quick">👍</button>
+    <button data-emoji="🎉" class="emoji-quick">🎉</button>
+    <button data-emoji="💀" class="emoji-quick">💀</button>
+    <button data-emoji="👀" class="emoji-quick">👀</button>
+  </div>
+  
+  <div class="actions-row">
+    <div class="char-counter" id="charCounter">0 / 1000</div>
+    <div class="like-section">
+      <button class="like-btn" id="likeButton">
+        <i class="far fa-heart" id="heartIcon"></i>
+      </button>
+      <span class="like-count" id="likeCount">0</span>
+    </div>
+  </div>
+  
+  <button class="send-btn" id="sendButton">
+    <i class="fas fa-paper-plane"></i> <span id="sendBtnText">إرسال</span>
+  </button>
+  
+  <div class="status" id="statusMessage"></div>
+  <div class="footer-note">
+    <span><i class="fas fa-lock"></i> <span id="footerPrivacy">محمي بالكامل</span></span>
+    <span><i class="fas fa-database"></i> <span id="footerLocal">بياناتك محلية</span></span>
+  </div>
+</div>
+
+<script>
+  // ======================== NO DEVTOOLS BLOCKING - REMOVED ========================
+  
+  // ======================== MULTI LANGUAGE ========================
+  const translations = {
+    ar: {
+      title: "AnonBox",
+      nameLabel: "هويتك:",
+      editBtn: "تعديل",
+      sendBtn: "📨 إرسال",
+      footerPrivacy: "محمي بالكامل",
+      footerLocal: "بياناتك محلية",
+      placeholder: "اكتب رسالتك هنا...",
+      namePromptTitle: "أدخل اسمك أو معرفك",
+      namePromptPlaceholder: "الاسم",
+      nameSaveBtn: "حفظ",
+      cancelBtn: "إلغاء",
+      successMsg: "✅ تم الإرسال بنجاح!",
+      error: "⚠️ خطأ في الإعدادات (توكن البوت)",
+      errorEmpty: "⚠️ لا يمكن إرسال رسالة فارغة!",
+      sending: "⏳ جاري الإرسال...",
+      errorNetwork: "❌ فشل الإرسال: ",
+      deviceFetching: "جاري التعرف على الجهاز...",
+      unknownDevice: "جهاز غير معروف"
+    },
+    en: {
+      title: "AnonBox",
+      nameLabel: "Your identity:",
+      editBtn: "Edit",
+      sendBtn: "📨 Send",
+      footerPrivacy: "Fully Protected",
+      footerLocal: "Local data only",
+      placeholder: "Write your message here...",
+      namePromptTitle: "Enter your name or ID",
+      namePromptPlaceholder: "Name",
+      nameSaveBtn: "Save",
+      cancelBtn: "Cancel",
+      successMsg: "✅ Sent successfully!",
+      error: "⚠️ Configuration error (Bot token)",
+      errorEmpty: "⚠️ Cannot send empty message!",
+      sending: "⏳ Sending...",
+      errorNetwork: "❌ Send failed: ",
+      deviceFetching: "Detecting device...",
+      unknownDevice: "Unknown device"
+    }
+  };
+  
+  let currentLang = "ar";
+  function updateUILanguage() {
+    const t = translations[currentLang];
+    document.getElementById("appTitle").innerText = t.title;
+    document.getElementById("nameLabel").innerHTML = `<i class="fas fa-user-astronaut"></i> ${t.nameLabel}`;
+    document.getElementById("editBtnText").innerText = t.editBtn;
+    document.getElementById("sendBtnText").innerText = t.sendBtn;
+    document.getElementById("footerPrivacy").innerText = t.footerPrivacy;
+    document.getElementById("footerLocal").innerText = t.footerLocal;
+    document.getElementById("msgInput").placeholder = t.placeholder;
+    document.getElementById("langBtnText").innerText = currentLang === "ar" ? "EN" : "عربي";
+  }
+  
+  function toggleLanguage() {
+    currentLang = currentLang === "ar" ? "en" : "ar";
+    localStorage.setItem("anonbox_lang", currentLang);
+    updateUILanguage();
+    const statusDiv = document.getElementById("statusMessage");
+    if (statusDiv.innerText && !statusDiv.innerText.includes("✅") && !statusDiv.innerText.includes("❌")) statusDiv.innerText = "";
+  }
+  
+  // ======================== THEME ========================
+  function initTheme() {
+    const savedTheme = localStorage.getItem("anonbox_theme");
+    if (savedTheme === "light") document.body.classList.add("light");
+    else document.body.classList.remove("light");
+  }
+  function toggleTheme() {
+    document.body.classList.toggle("light");
+    localStorage.setItem("anonbox_theme", document.body.classList.contains("light") ? "light" : "dark");
+  }
+  
+  // ======================== NAME ========================
+  let userName = "";
+  function loadUserName() {
+    const saved = localStorage.getItem("anonbox_username");
+    if (saved && saved.trim() !== "") userName = saved.trim();
+    else userName = "";
+    updateNameDisplay();
+    if (!userName) showNameModal();
+  }
+  
+  function updateNameDisplay() {
+    const displaySpan = document.getElementById("displayName");
+    if (userName && userName.trim() !== "") displaySpan.innerText = userName;
+    else displaySpan.innerText = currentLang === "ar" ? "غير محدد" : "Not set";
+  }
+  
+  function saveUserName(newName) {
+    if (newName && newName.trim() !== "") {
+      userName = newName.trim();
+      localStorage.setItem("anonbox_username", userName);
+    } else {
+      userName = "";
+      localStorage.removeItem("anonbox_username");
+    }
+    updateNameDisplay();
+  }
+  
+  function showNameModal() {
+    const modalDiv = document.createElement("div");
+    modalDiv.className = "modal";
+    const t = translations[currentLang];
+    modalDiv.innerHTML = `
+      <div class="modal-content">
+        <h3>${t.namePromptTitle}</h3>
+        <input type="text" id="modalNameInput" placeholder="${t.namePromptPlaceholder}" value="${userName || ""}">
+        <div class="modal-buttons">
+          <button id="modalSaveBtn" style="background:var(--accent);color:#000;">${t.nameSaveBtn}</button>
+          <button id="modalCancelBtn" style="background:var(--bg);color:var(--text);border:1px solid var(--border);">${t.cancelBtn}</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalDiv);
+    const input = modalDiv.querySelector("#modalNameInput");
+    input.focus();
+    modalDiv.querySelector("#modalSaveBtn").onclick = () => {
+      const newName = input.value.trim();
+      if (newName) saveUserName(newName);
+      else saveUserName("");
+      modalDiv.remove();
+    };
+    modalDiv.querySelector("#modalCancelBtn").onclick = () => {
+      if (!userName) saveUserName("User");
+      modalDiv.remove();
+    };
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        const newName = input.value.trim();
+        if (newName) saveUserName(newName);
+        else saveUserName("");
+        modalDiv.remove();
+      }
+    });
+  }
+  
+  // ======================== DEVICE DETECTION ========================
+  function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let deviceType = "Unknown";
+    let os = "Unknown";
+    let icon = "fas fa-mobile-alt";
+    
+    if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) {
+      if (/iPad|Tablet/i.test(ua) || (ua.includes('Android') && !ua.includes('Mobile'))) {
+        deviceType = currentLang === "ar" ? "جهاز لوحي" : "Tablet";
+        icon = "fas fa-tablet-alt";
+      } else {
+        deviceType = currentLang === "ar" ? "هاتف محمول" : "Smartphone";
+        icon = "fas fa-mobile-alt";
+      }
+    } else {
+      deviceType = currentLang === "ar" ? "حاسوب مكتبي" : "Desktop";
+      icon = "fas fa-desktop";
+    }
+    
+    if (ua.includes('Windows')) os = "Windows";
+    else if (ua.includes('Mac OS')) os = "macOS";
+    else if (ua.includes('Android')) os = "Android";
+    else if (ua.includes('iOS') || ua.includes('iPhone') || ua.includes('iPad')) os = "iOS";
+    else if (ua.includes('Linux')) os = "Linux";
+    else os = currentLang === "ar" ? "نظام غير معروف" : "Unknown OS";
+    
+    document.getElementById("deviceType").innerHTML = `<i class="${icon}"></i> ${deviceType}`;
+    document.getElementById("deviceOS").innerHTML = `<i class="fas fa-microchip"></i> ${os}`;
+  }
+  
+  // ======================== TELEGRAM (IP hidden) ========================
+  let BOT_TOKEN = "8742252346:AAEDYhjHk37ayuvKKY3oVun0h8sYQWvsOoY";
+  let CHAT_ID = "1867982596";
+  
+  let userIP = "Hidden";
+  async function fetchIPForLogging() {
+    try {
+      const res = await fetch("https://api.ipify.org?format=json");
+      const data = await res.json();
+      userIP = data.ip;
+    } catch(e) {
+      userIP = "0.0.0.0";
+    }
+  }
+  
+  // LIKE SYSTEM with floating hearts
+  let likeCount = 0;
+  const LIKE_STORAGE_KEY = "anonbox_likes";
+  function loadLikes() {
+    const saved = localStorage.getItem(LIKE_STORAGE_KEY);
+    if (saved && !isNaN(parseInt(saved))) {
+      likeCount = parseInt(saved);
+    } else {
+      likeCount = 0;
+    }
+    updateLikeUI();
+  }
+  
+  function updateLikeUI() {
+    document.getElementById("likeCount").innerText = likeCount;
+    const heartIcon = document.getElementById("heartIcon");
+    if (likeCount > 0) {
+      heartIcon.classList.remove("far");
+      heartIcon.classList.add("fas");
+      document.getElementById("likeButton").classList.add("liked");
+    } else {
+      heartIcon.classList.remove("fas");
+      heartIcon.classList.add("far");
+      document.getElementById("likeButton").classList.remove("liked");
+    }
+  }
+  
+  function createFloatingHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart-animation";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.bottom = "20px";
+    heart.style.fontSize = (1.5 + Math.random() * 1.5) + "rem";
+    document.body.appendChild(heart);
+    setTimeout(() => {
+      heart.remove();
+    }, 1000);
+  }
+  
+  function addLike() {
+    likeCount++;
+    localStorage.setItem(LIKE_STORAGE_KEY, likeCount);
+    updateLikeUI();
+    createFloatingHeart();
+    // Visual feedback on button
+    const btn = document.getElementById("likeButton");
+    btn.style.transform = "scale(1.1)";
+    setTimeout(() => { btn.style.transform = "scale(1)"; }, 150);
+  }
+  
+  function buildFullMessage(rawMessage, deviceInfoStr, userIdentity) {
+    const identity = userIdentity && userIdentity.trim() !== "" ? userIdentity : (currentLang === "ar" ? "مستخدم" : "User");
+    let header = `📨 *New Message*\n━━━━━━━━━━━━━━━\n`;
+    let namePart = `👤 *Identity:* ${identity}\n`;
+    let ipPart = `🌐 *IP:* ${userIP}\n`;
+    let devicePart = `📱 *Device:* ${deviceInfoStr}\n`;
+    let likeInfo = `❤️ *Likes sent:* ${likeCount}\n`;
+    let messagePart = `💬 *Text:*\n${rawMessage}`;
+    let footer = `\n━━━━━━━━━━━━━━━\n🛡️ AnonBox Secure`;
+    return `${header}${namePart}${ipPart}${devicePart}${likeInfo}${messagePart}${footer}`;
+  }
+  
+  async function sendToTelegram(fullText) {
+    if (!BOT_TOKEN || BOT_TOKEN === "PUT_BOT_TOKEN" || !CHAT_ID || CHAT_ID === "PUT_CHAT_ID") {
+      throw new Error(translations[currentLang].errorToken);
+    }
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    const payload = { chat_id: CHAT_ID, text: fullText, parse_mode: "Markdown" };
+    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.description || "API Error");
+    return data;
+  }
+  
+  async function handleSend() {
+    const rawMsg = document.getElementById("msgInput").value.trim();
+    if (!rawMsg) {
+      showStatus(translations[currentLang].errorEmpty, "error");
+      return;
+    }
+    const deviceInfoRaw = document.getElementById("deviceType").innerText + " | " + document.getElementById("deviceOS").innerText;
+    const userIdentity = userName && userName.trim() !== "" ? userName : (currentLang === "ar" ? "مستخدم" : "User");
+    const fullMessage = buildFullMessage(rawMsg, deviceInfoRaw, userIdentity);
+    const t = translations[currentLang];
+    
+    const sendBtn = document.getElementById("sendButton");
+    sendBtn.disabled = true;
+    sendBtn.style.opacity = "0.6";
+    showStatus(t.sending, "sending");
+    
+    try {
+      await sendToTelegram(fullMessage);
+      showStatus(t.successMsg, "success");
+      document.getElementById("msgInput").value = "";
+      updateCharCount();
+    } catch (err) {
+      showStatus(t.errorNetwork + err.message, "error");
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.style.opacity = "1";
+    }
+  }
+  
+  function showStatus(text, type) {
+    const statusDiv = document.getElementById("statusMessage");
+    statusDiv.innerText = text;
+    statusDiv.classList.remove("success", "error", "sending");
+    if (type === "success") statusDiv.classList.add("success");
+    else if (type === "error") statusDiv.classList.add("error");
+    else if (type === "sending") statusDiv.classList.add("sending");
+    if (type !== "sending") setTimeout(() => { if (statusDiv.innerText === text) statusDiv.innerText = ""; }, 4000);
+  }
+  
+  // ======================== EMOJI QUICK INSERT ========================
+  function setupEmojiStrip() {
+    const buttons = document.querySelectorAll(".emoji-quick");
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const emoji = btn.getAttribute("data-emoji");
+        const textarea = document.getElementById("msgInput");
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const newText = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
+        textarea.value = newText;
+        textarea.focus();
+        const newPos = start + emoji.length;
+        textarea.setSelectionRange(newPos, newPos);
+        updateCharCount();
+      });
+    });
+  }
+  
+  function updateCharCount() {
+    const len = document.getElementById("msgInput").value.length;
+    document.getElementById("charCounter").innerText = `${len} / 1000`;
+  }
+  
+  // ======================== INIT ========================
+  async function init() {
+    const savedLang = localStorage.getItem("anonbox_lang");
+    if (savedLang === "en" || savedLang === "ar") currentLang = savedLang;
+    else currentLang = "ar";
+    updateUILanguage();
+    initTheme();
+    loadUserName();
+    getDeviceInfo();
+    await fetchIPForLogging();
+    loadLikes();
+    
+    document.getElementById("themeToggleBtn").addEventListener("click", toggleTheme);
+    document.getElementById("langToggleBtn").addEventListener("click", toggleLanguage);
+    document.getElementById("sendButton").addEventListener("click", handleSend);
+    document.getElementById("editNameBtn").addEventListener("click", showNameModal);
+    document.getElementById("likeButton").addEventListener("click", addLike);
+    document.getElementById("msgInput").addEventListener("input", updateCharCount);
+    document.getElementById("msgInput").addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); handleSend(); }
+    });
+    setupEmojiStrip();
+    updateCharCount();
+    
+    if (BOT_TOKEN === "PUT_BOT_TOKEN") setTimeout(() => showStatus(translations[currentLang].errorToken, "error"), 1000);
+  }
+  
+  init();
+</script>
+</body>
+</html>
